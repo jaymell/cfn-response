@@ -14,7 +14,7 @@ FAILED = "FAILED"
 def send(event, context, response_status, reason=None, response_data=None, physical_resource_id=None):
     response_data = response_data or {}
     response_body = json.dumps(
-        {
+      {
             'Status': response_status,
             'Reason': reason or "See the details in CloudWatch Log Stream: " + context.log_stream_name,
             'PhysicalResourceId': physical_resource_id or context.log_stream_name,
@@ -22,9 +22,8 @@ def send(event, context, response_status, reason=None, response_data=None, physi
             'RequestId': event['RequestId'],
             'LogicalResourceId': event['LogicalResourceId'],
             'Data': response_data
-        }
-    )
-
+      },
+      ensure_ascii=False).encode('utf8')
     opener = build_opener(HTTPHandler)
     request = Request(event['ResponseURL'], data=response_body)
     request.add_header('Content-Type', '')
